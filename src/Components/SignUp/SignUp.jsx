@@ -1,18 +1,18 @@
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React from 'react';
+import { createUserProfileDocument } from '../../firebase/firebase-util';
 import CustomButton from '../Custom-button/CustomButton';
 import FormInput from '../Form-input/FormInput';
 import './SignUp.scss';
 
 class SignUp extends React.Component {
-    constructor() {
-        super();
-        this.state = {
+  
+      state = {
             displayName: '',
             email: '',
             password: '',
             confirmPassword : ''
         }
-    }
     handleSubmit = async event => {
         event.preventDefault();
         const { displayName, email, password, confirmPassword } = this.state;
@@ -21,7 +21,8 @@ class SignUp extends React.Component {
             return;
         }
         try {
-            const { user } = await auth.createUserWithEmailAndPassword(email, password);
+            const auth = getAuth();
+            const { user } = await createUserWithEmailAndPassword(auth, email, password);
            await createUserProfileDocument(user, { displayName });
             this.setState({
                 displayName: '',

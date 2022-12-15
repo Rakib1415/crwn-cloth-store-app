@@ -1,5 +1,6 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { auth } from './firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db } from './firebase';
 
 export const signInWithGoogle = async() => {
     const provider = new GoogleAuthProvider();
@@ -9,7 +10,7 @@ export const signInWithGoogle = async() => {
     try{
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        console.log(user);
+        // console.log(user);
     }catch(err){
         console.log(err);
     }
@@ -17,6 +18,30 @@ export const signInWithGoogle = async() => {
 
 export const handleSignOut = async() => {
     await signOut(auth);
+}
+
+export const createUserProfileDocument = async(userAuth, additionalData) => {
+    console.log(userAuth);
+    console.log(additionalData);
+    if(!userAuth) return;
+    const userRef = doc(db, "users", userAuth.uid);
+    try{
+        const userSnap = await getDoc(userRef);
+        if(!userSnap.exists()){
+            const {displayName, email} = userAuth;
+            const createdAt = new Date();
+            await setDoc(userRef, {
+                displayName,
+                email,
+                createdAt,
+                ...additionalData
+            });
+        }
+    }catch(err){
+        console.log('user created error', err.message);
+    }
+
+    return userRef;
 }
 
 

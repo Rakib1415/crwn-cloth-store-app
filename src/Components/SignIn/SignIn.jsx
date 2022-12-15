@@ -1,3 +1,4 @@
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import React from 'react';
 import { signInWithGoogle } from '../../firebase/firebase-util';
 import CustomButton from '../Custom-button/CustomButton';
@@ -5,18 +6,18 @@ import FormInput from '../Form-input/FormInput';
 import './SignIn.scss';
 
 class SignIn extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
+
+        state = {
             email: '',
             password: ''
         }
-    }
+
     handleSubmit = async event => {
         event.preventDefault();
         const { email, password } = this.state;
         try {
-            await auth.signInWithEmailAndPassword(email, password);
+            const auth = getAuth();
+            await signInWithEmailAndPassword(auth, email, password);
             this.setState({ email: '', password: '' });
         } catch (error) {
             console.log(error);
