@@ -21,8 +21,7 @@ export const handleSignOut = async() => {
 }
 
 export const createUserProfileDocument = async(userAuth, additionalData) => {
-    console.log(userAuth);
-    console.log(additionalData);
+    
     if(!userAuth) return;
     const userRef = doc(db, "users", userAuth.uid);
     try{
