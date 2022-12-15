@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import Header from './Components/Header/Header';
+import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
 import { createUserProfileDocument } from './firebase/firebase-util';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
@@ -43,12 +44,15 @@ class App extends React.Component {
       <Routes>
       <Route path="/" element={<HomePage/>}/>
       <Route path="/shop" element={<ShopPage/>}/>
-      <Route path='/signin' element={<SignInandSignUP/>}/>
+      <Route path='/*' element={<PublicOutlet/>}>
+        <Route path='signin' element={<SignInandSignUP/>}/>
+      </Route>
     </Routes>
     </div>
   )
  }
 }
+
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser : user => dispatch(setCurrentUser(user))

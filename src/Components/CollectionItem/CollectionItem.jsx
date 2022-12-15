@@ -14,7 +14,7 @@ const CollectionItem = ({ item, addItem }) => {
                 <span className="name">{name}</span>
                 <span className="price">{price}</span>
             </div>
-            <CustomButton inverted> Add to cart</CustomButton>
+            <CustomButton inverted>Add cart</CustomButton>
         </div>
     );
 };
