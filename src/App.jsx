@@ -6,10 +6,14 @@ import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import Header from './Components/Header/Header';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
+
 import { createUserProfileDocument } from './firebase/firebase-util';
+
+import Checkout from './Pages/Checkout/Checkout';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
 import SignInandSignUP from './Pages/Sign-in and Sign-up/SignInandSignUP';
+
 import { setCurrentUser } from './store/user/user-actions';
 
 class App extends React.Component {
@@ -44,6 +48,7 @@ class App extends React.Component {
       <Routes>
       <Route path="/" element={<HomePage/>}/>
       <Route path="/shop" element={<ShopPage/>}/>
+      <Route path='/checkout' element={<Checkout/>}/>
       <Route path='/*' element={<PublicOutlet/>}>
         <Route path='signin' element={<SignInandSignUP/>}/>
       </Route>
