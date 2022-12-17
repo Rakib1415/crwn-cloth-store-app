@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import CollectionsOverview from './Components/Collections-overview/Collections-overview';
 import Header from './Components/Header/Header';
+import PrivateOutlet from './Components/PrivateOutlet/Private-outlet';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
 
 import { createUserProfileDocument } from './firebase/firebase-util';
@@ -53,7 +54,9 @@ class App extends React.Component {
         <Route path="" element={<CollectionsOverview/>}/>
         <Route path=":categoryId" element={<CategoryPage/>}/>
       </Route>
-      <Route path='/checkout' element={<Checkout/>}/>
+      <Route path='/*' element={<PrivateOutlet/>}>
+        <Route path='checkout' element={<Checkout/>}/>
+      </Route>
       <Route path='/*' element={<PublicOutlet/>}>
         <Route path='signin' element={<SignInandSignUP/>}/>
       </Route>
