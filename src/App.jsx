@@ -16,6 +16,7 @@ import Checkout from './Pages/Checkout/Checkout';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
 import SignInandSignUP from './Pages/Sign-in and Sign-up/SignInandSignUP';
+import ThankYou from './Pages/Thank-you/Thank-you';
 
 import { setCurrentUser } from './store/user/user-actions';
 
@@ -60,6 +61,7 @@ class App extends React.Component {
       <Route path='/*' element={<PublicOutlet/>}>
         <Route path='signin' element={<SignInandSignUP/>}/>
       </Route>
+      <Route path='/thankyou' element={<ThankYou/>}/>
     </Routes>
     </div>
   )
