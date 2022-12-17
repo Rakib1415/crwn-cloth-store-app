@@ -4,11 +4,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
+import CollectionsOverview from './Components/Collections-overview/Collections-overview';
 import Header from './Components/Header/Header';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
 
 import { createUserProfileDocument } from './firebase/firebase-util';
 
+import CategoryPage from './Pages/Category/Category-page';
 import Checkout from './Pages/Checkout/Checkout';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
@@ -47,7 +49,10 @@ class App extends React.Component {
       <Header/>
       <Routes>
       <Route path="/" element={<HomePage/>}/>
-      <Route path="/shop" element={<ShopPage/>}/>
+      <Route path="/shop/*" element={<ShopPage/>}>
+        <Route path="" element={<CollectionsOverview/>}/>
+        <Route path=":categoryId" element={<CategoryPage/>}/>
+      </Route>
       <Route path='/checkout' element={<Checkout/>}/>
       <Route path='/*' element={<PublicOutlet/>}>
         <Route path='signin' element={<SignInandSignUP/>}/>
