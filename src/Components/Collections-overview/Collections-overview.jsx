@@ -9,7 +9,7 @@ import CollectionPreview from '../../Components/CollectionPreview/CollectionPrev
 import './Collections-overview.scss';
 
 const CollectionsOverview = ({collections}) => {
-  console.log(collections);
+ 
   return (
     <div className='collections-overview'>
        {

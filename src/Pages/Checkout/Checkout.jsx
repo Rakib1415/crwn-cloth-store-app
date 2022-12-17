@@ -9,7 +9,7 @@ import { selectCartItems, selectCartTotal } from '../../store/cart/cart-selector
 import './Checkout.scss';
 
 const Checkout = ({cartItems, total}) => {
-  console.log(cartItems, total);
+  
   return (
     <div className='checkout-page'>
       <div className='checkout-header'>
