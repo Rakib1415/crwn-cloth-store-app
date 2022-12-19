@@ -7,26 +7,26 @@ import { toggleCartHidden } from '../../store/cart/cart-actions';
 import { selectCartItems } from '../../store/cart/cart-selectors';
 
 import CartItem from '../CartItem/CartItem';
-import CustomButton from '../Custom-button/CustomButton';
 
+import { CartDropdownButton, CartDropdownContainer, CartItemsContainer, EmptyMessageContainer } from './CartDropdown-styles';
 import './CartDropdown.scss';
 
 const CartDropdown = ({cartItems, toggleCartHidden}) => {
     const navigate = useNavigate();
   
     return (
-        <div className="cart-dropdown">
-            <div className="cart-items">
+        <CartDropdownContainer>
+            <CartItemsContainer>
                {
                 cartItems.length ? 
                 (cartItems.map(cartItem => <CartItem key={cartItem.id} item={cartItem}/>))
                 :
-                (<span className='empty-message'>Your Cart is empty</span>)
+                (<EmptyMessageContainer>Your Cart is empty</EmptyMessageContainer>)
                }
-            </div>
-            <CustomButton onClick={() => { navigate('/checkout');
-        toggleCartHidden();}}>GO TO CHECKOUT</CustomButton>
-        </div>
+            </CartItemsContainer>
+            <CartDropdownButton onClick={() => { navigate('/checkout');
+        toggleCartHidden();}}>GO TO CHECKOUT</CartDropdownButton>
+        </CartDropdownContainer>
     );
 };
 

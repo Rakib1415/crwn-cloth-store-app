@@ -4,20 +4,20 @@ import { useParams } from 'react-router-dom';
 import { selectCollection } from '../../store/shop/shop-selectors';
 
 import CollectionItem from '../../Components/CollectionItem/CollectionItem';
-import './Category-page.scss';
 
+import { CategoryItemsContainer, CategoryPageContainer, CategoryTitle } from './CategoryPage-styles';
 
 const CategoryPage = ({collection}) => {
     const {title, items} = collection;
   return (
-    <div className='collection-page'>
-      <h2 className='title'>{title}</h2>
-      <div className='items'>
+    <CategoryPageContainer>
+      <CategoryTitle>{title}</CategoryTitle>
+      <CategoryItemsContainer>
         {
             items.map(item => <CollectionItem key={item.id} item ={item}/>)
         }
-      </div>
-    </div>
+      </CategoryItemsContainer>
+    </CategoryPageContainer>
   )
 }
 

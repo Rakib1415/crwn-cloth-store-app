@@ -6,16 +6,18 @@ import { selectCollectionsForPreview } from '../../store/shop/shop-selectors';
 
 
 import CollectionPreview from '../../Components/CollectionPreview/CollectionPreview';
-import './Collections-overview.scss';
+
+
+import { CollectionsOverviewContainer } from './CollectionOverview-styles';
 
 const CollectionsOverview = ({collections}) => {
  
   return (
-    <div className='collections-overview'>
+    <CollectionsOverviewContainer>
        {
             collections.map(({ id, ...otherCollectionProps }) => <CollectionPreview key={id} {...otherCollectionProps}></CollectionPreview>)
         }
-    </div>
+    </CollectionsOverviewContainer>
   )
 }
 

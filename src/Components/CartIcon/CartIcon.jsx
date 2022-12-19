@@ -4,16 +4,17 @@ import { createStructuredSelector } from 'reselect';
 import ShoppingIcon from '../../assets/shopping-bag.svg';
 import { toggleCartHidden } from '../../store/cart/cart-actions';
 import { selectCartItemsCount } from '../../store/cart/cart-selectors';
-import './CartIcon.scss';
+
+import { CartContainer, ItemCountContainer, ShoppingIconContainer } from './CartIcon-styles';
 
 
 const CartIcon = ({toggleCartHidden, totalItem}) => {
     return (
-        <div className='cart-icon' onClick={toggleCartHidden}>
-            <img className='shopping-icon' src={ShoppingIcon} />
-            <span className='item-count'>{totalItem}</span>
+        <CartContainer onClick={toggleCartHidden}>
+            <ShoppingIconContainer src={ShoppingIcon} />
+            <ItemCountContainer>{totalItem}</ItemCountContainer>
             
-        </div>
+        </CartContainer>
     );
 };
 
