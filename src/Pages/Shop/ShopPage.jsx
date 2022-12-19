@@ -7,12 +7,11 @@ import { db } from '../../firebase/firebase';
 import { convertCollectionsSnapshotToMap } from '../../firebase/firebase-util';
 import { updateCollections } from '../../store/shop/shop-actions';
 
-import './ShopPage.scss';
+
 
 
 class ShopPage extends React.Component{
-
-
+   
     unsubscribeFromSnapshot = null;
     getSnapshot =async() =>{
         const {updateCollections} = this.props;
@@ -20,6 +19,7 @@ class ShopPage extends React.Component{
         const snapShot = await getDocs(collectionRef);
         const collectionsMap = convertCollectionsSnapshotToMap(snapShot);
         updateCollections(collectionsMap);
+        this.props.handleLoading();
     }
     componentDidMount(){
         this.getSnapshot();
@@ -27,7 +27,7 @@ class ShopPage extends React.Component{
 
     render(){
         return (
-            <div className="shop-page">
+            <div>
               <Outlet/>
              </div>
             )

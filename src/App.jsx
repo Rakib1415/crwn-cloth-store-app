@@ -9,6 +9,7 @@ import CollectionsOverview from './Components/Collections-overview/Collections-o
 import Header from './Components/Header/Header';
 import PrivateOutlet from './Components/PrivateOutlet/Private-outlet';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
+import WithSpinner from './Components/WithSpinner/WithSpinner';
 
 import { createUserProfileDocument } from './firebase/firebase-util';
 
@@ -21,8 +22,18 @@ import ThankYou from './Pages/Thank-you/Thank-you';
 
 import { setCurrentUser } from './store/user/user-actions';
 
-class App extends React.Component {
+const CollectionOverviewWithSpinner = WithSpinner(CollectionsOverview);
+const CategoryPageWithSpinner = WithSpinner(CategoryPage);
 
+class App extends React.Component {
+  state = {
+    isLoading : true
+  }
+  handleLoading = () => {
+    this.setState({
+      isLoading : false
+    })
+  }
  unsubscribeFromAuth = null;
  componentDidMount(){
   const {setCurrentUser} = this.props;
@@ -53,9 +64,9 @@ class App extends React.Component {
       <Header/>
       <Routes>
       <Route path="/" element={<HomePage/>}/>
-      <Route path="/shop/*" element={<ShopPage/>}>
-        <Route path="" element={<CollectionsOverview/>}/>
-        <Route path=":categoryId" element={<CategoryPage/>}/>
+      <Route path="/shop/*" element={<ShopPage handleLoading={this.handleLoading}/>}>
+        <Route path="" element={<CollectionOverviewWithSpinner isLoading={this.state.isLoading}/>}/>
+        <Route path=":categoryId" element={<CategoryPageWithSpinner isLoading={this.state.isLoading}/>}/>
       </Route>
       <Route path='/*' element={<PrivateOutlet/>}>
         <Route path='checkout' element={<Checkout/>}/>
