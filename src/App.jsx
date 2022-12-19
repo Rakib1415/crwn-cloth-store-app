@@ -3,6 +3,7 @@ import { getDoc } from 'firebase/firestore';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
 import './App.scss';
 import CollectionsOverview from './Components/Collections-overview/Collections-overview';
 import Header from './Components/Header/Header';
@@ -39,6 +40,7 @@ class App extends React.Component {
     }
     
   });
+
  };
 
  componentWillUnmount(){
@@ -71,6 +73,6 @@ class App extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser : user => dispatch(setCurrentUser(user))
-})
+});
 
 export default connect(null, mapDispatchToProps)(App);

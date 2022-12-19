@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
 export const signInWithGoogle = async() => {
@@ -41,6 +41,36 @@ export const createUserProfileDocument = async(userAuth, additionalData) => {
     }
 
     return userRef;
+}
+
+export const addCollectionAndDocuments = async(collectionKey, objectsToAdd) => {
+    const collectionRef = collection(db, collectionKey);
+    
+    const batch = writeBatch(db);
+    objectsToAdd.forEach(obj => {
+        const newDocRef = doc(collectionRef);
+        batch.set(newDocRef, obj);
+    });
+
+    return await batch.commit();
+};
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transFormCollections = collections.docs.map( doc => {
+        const {title, items} = doc.data();
+
+        return {
+            routeName : encodeURI(title.toLowerCase()),
+            id : doc.id,
+            title,
+            items
+        };
+    });
+    
+    return transFormCollections.reduce((acc, collection) => {
+        acc[collection.title.toLowerCase()] = collection;
+        return acc;
+    }, {});
 }
 
 
