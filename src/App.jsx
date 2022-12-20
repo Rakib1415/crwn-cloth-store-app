@@ -5,15 +5,14 @@ import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import './App.scss';
-import CollectionsOverview from './Components/Collections-overview/Collections-overview';
+import CollectionsOverviewContainer from './Components/Collections-overview/Collections-overview-container';
 import Header from './Components/Header/Header';
 import PrivateOutlet from './Components/PrivateOutlet/Private-outlet';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
-import WithSpinner from './Components/WithSpinner/WithSpinner';
 
 import { createUserProfileDocument } from './firebase/firebase-util';
 
-import CategoryPage from './Pages/Category/Category-page';
+import CategoryPageContainer from './Pages/Category/Category-page-container';
 import Checkout from './Pages/Checkout/Checkout';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
@@ -22,18 +21,10 @@ import ThankYou from './Pages/Thank-you/Thank-you';
 
 import { setCurrentUser } from './store/user/user-actions';
 
-const CollectionOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CategoryPageWithSpinner = WithSpinner(CategoryPage);
+
 
 class App extends React.Component {
-  state = {
-    isLoading : true
-  }
-  handleLoading = () => {
-    this.setState({
-      isLoading : false
-    })
-  }
+
  unsubscribeFromAuth = null;
  componentDidMount(){
   const {setCurrentUser} = this.props;
@@ -59,14 +50,15 @@ class App extends React.Component {
  }
 
  render(){
+
   return (
     <div>
       <Header/>
       <Routes>
       <Route path="/" element={<HomePage/>}/>
-      <Route path="/shop/*" element={<ShopPage handleLoading={this.handleLoading}/>}>
-        <Route path="" element={<CollectionOverviewWithSpinner isLoading={this.state.isLoading}/>}/>
-        <Route path=":categoryId" element={<CategoryPageWithSpinner isLoading={this.state.isLoading}/>}/>
+      <Route path="/shop/*" element={<ShopPage/>}>
+        <Route path="" element={<CollectionsOverviewContainer/>}/>
+        <Route path=":categoryId" element={<CategoryPageContainer/>}/>
       </Route>
       <Route path='/*' element={<PrivateOutlet/>}>
         <Route path='checkout' element={<Checkout/>}/>
