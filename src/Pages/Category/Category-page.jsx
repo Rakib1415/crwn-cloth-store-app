@@ -21,7 +21,8 @@ const CategoryPage = ({collection}) => {
   )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps);
     const {categoryId} = useParams();  
     return{
         collection : selectCollection(categoryId)(state)
