@@ -1,14 +1,24 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
-export const signInWithGoogle = async() => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({
-        prompt : 'select_account'
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+    prompt : 'select_account'
+})
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unSubscribe = onAuthStateChanged(auth, (userAuth) => {
+            unSubscribe();
+            resolve(userAuth);
+        }, reject)
     })
+}
+
+export const signInWithGoogle = async() => {
     try{
-        const result = await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
         // console.log(user);
     }catch(err){

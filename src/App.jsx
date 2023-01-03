@@ -1,7 +1,4 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getDoc } from 'firebase/firestore';
 import React from 'react';
-import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import './App.scss';
@@ -10,43 +7,44 @@ import Header from './Components/Header/Header';
 import PrivateOutlet from './Components/PrivateOutlet/Private-outlet';
 import PublicOutlet from './Components/PublicOutlet/PublicOutlet';
 
-import { createUserProfileDocument } from './firebase/firebase-util';
 
+import { connect } from 'react-redux';
 import CategoryPageContainer from './Pages/Category/Category-page-container';
 import Checkout from './Pages/Checkout/Checkout';
 import HomePage from './Pages/HomePage/HomePage.component';
 import ShopPage from './Pages/Shop/ShopPage';
 import SignInandSignUP from './Pages/Sign-in and Sign-up/SignInandSignUP';
 import ThankYou from './Pages/Thank-you/Thank-you';
+import { checkUserSession } from './store/user/user-actions';
 
-import { setCurrentUser } from './store/user/user-actions';
 
 
 
 class App extends React.Component {
 
- unsubscribeFromAuth = null;
  componentDidMount(){
-  const {setCurrentUser} = this.props;
-  const auth = getAuth();
-  this.unsubscribeFromAuth = onAuthStateChanged(auth, async(user) => {
-    if(auth.currentUser){
-      const userRef = await createUserProfileDocument(user);
-    const userSnap = await getDoc(userRef);
-    setCurrentUser({
-        id : userSnap.id,
-        ...userSnap.data()
-      });
-    }else{
-      setCurrentUser(auth.currentUser)
-    }
+  const {checkUserSession} = this.props;
+  checkUserSession();
+  // const {setCurrentUser} = this.props;
+  // const auth = getAuth();
+  // this.unsubscribeFromAuth = onAuthStateChanged(auth, async(user) => {
+  //   if(auth.currentUser){
+  //     const userRef = await createUserProfileDocument(user);
+  //   const userSnap = await getDoc(userRef);
+  //   setCurrentUser({
+  //       id : userSnap.id,
+  //       ...userSnap.data()
+  //     });
+  //   }else{
+  //     setCurrentUser(auth.currentUser)
+  //   }
     
-  });
+  // });
 
  };
 
  componentWillUnmount(){
-  this.unsubscribeFromAuth();
+  // this.unsubscribeFromAuth();
  }
 
  render(){
@@ -73,9 +71,10 @@ class App extends React.Component {
  }
 }
 
-
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser : user => dispatch(setCurrentUser(user))
+  checkUserSession : () => dispatch(checkUserSession())
 });
+
+
 
 export default connect(null, mapDispatchToProps)(App);
