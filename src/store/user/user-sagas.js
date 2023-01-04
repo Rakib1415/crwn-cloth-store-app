@@ -1,17 +1,18 @@
-import { signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { getDoc } from "firebase/firestore";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import { auth } from "../../firebase/firebase";
 import { createUserProfileDocument, getCurrentUser, googleProvider } from "../../firebase/firebase-util";
-import { signInFailure, signInSuccess, signOutFailure, signOutSuccess } from "./user-actions";
+import { signInFailure, signInSuccess, signOutFailure, signOutSuccess, signUpFailure, signUpSuccess } from "./user-actions";
 import userActionTypes from "./user-types";
 
 
-export function* getSnapshotFromUserAuth(userAuth) {
+export function* getSnapshotFromUserAuth(userAuth, additionalData) {
     try {
       const userRef = yield call(
         createUserProfileDocument,
-        userAuth
+        userAuth,
+        additionalData
       );
         const userSnapshot = yield getDoc(userRef);
       yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
@@ -65,6 +66,21 @@ export function* logOut(){
     }
 }
 
+export function* signUp({payload : {email, password, displayName}}){
+    try{
+        const { user } = yield createUserWithEmailAndPassword(auth, email, password);
+        yield put(signUpSuccess({user, additionalData: {displayName}}))
+
+    }catch(err){
+        yield put(signUpFailure(err));
+    }
+}
+
+export function* signInAfterSignUp({payload : {user, additionalData}}){
+    yield getSnapshotFromUserAuth(user, additionalData);
+
+}
+
 export function* onGoogleSignInStart(){
     yield takeLatest(userActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle)
 }
@@ -81,6 +97,13 @@ export function* onSignOutStart() {
     yield takeLatest(userActionTypes.SIGN_OUT_START, logOut)
 }
 
+export function* onSignUpStart(){
+    yield takeLatest(userActionTypes.SIGN_UP_START, signUp);
+}
+export function* onSignUpSuccess(){
+    yield takeLatest(userActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp)
+}
+
 export function* userSagas(){
-    yield all([call(onGoogleSignInStart), call(onEmailSignInStart), call(onCheckUserSession), call(onSignOutStart)])
+    yield all([call(onGoogleSignInStart), call(onEmailSignInStart), call(onCheckUserSession), call(onSignOutStart), call(onSignUpStart), call(onSignUpSuccess)])
 }
